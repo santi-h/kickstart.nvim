@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -171,6 +171,12 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- santi-h: Set tabs default
+  vim.o.expandtab = true
+  vim.o.tabstop = 2
+  vim.o.shiftwidth = 2
+  vim.o.softtabstop = 2
 end
 
 -- ============================================================
@@ -250,6 +256,24 @@ do
     desc = 'Highlight when yanking (copying) text',
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
     callback = function() vim.hl.on_yank() end,
+  })
+
+  -- santi-h custom keymaps
+  -- vim.keymap.set("n", "<A-z>", ":set wrap! linebreak!<CR>", { noremap = true, silent = true })
+  vim.keymap.set('n', '<leader>st', '<cmd>Telescope treesitter<cr>', { desc = '[S]earch [T]reesitter symbols' })
+  vim.keymap.set('n', '<leader>r', '<cmd>set relativenumber!<cr>', { desc = 'Toggle relativenumber' })
+  vim.keymap.set('n', '<leader>o', 'o<Esc>', { desc = 'Add new line below without entering insert mode' })
+  vim.keymap.set('n', '<leader>O', 'O<Esc>', { desc = 'Add new line above without entering insert mode' })
+  vim.keymap.set('n', '-', '<Cmd>Explore %:p:h<CR>', { desc = 'Open netrw in current file directory' })
+  vim.keymap.set("n", "*", "*N")
+
+  vim.opt.listchars:append {
+    multispace = '··',
+  }
+
+  -- Move to the directory of the file specified when calling `nvim /path/to/dir/or/file
+  vim.api.nvim_create_autocmd('VimEnter', {
+    callback = function() vim.cmd 'cd %:p:h' end,
   })
 end
 
@@ -541,6 +565,17 @@ do
     --   },
     -- },
     -- pickers = {}
+    defaults = {
+      file_ignore_patterns = {
+        '.git/',
+        'node_modules/',
+      },
+    },
+    pickers = {
+      find_files = {
+        hidden = true,
+      },
+    },
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
     },
@@ -555,6 +590,7 @@ do
   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
   vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
   vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+  vim.keymap.set('n', '<leader>sF', builtin.git_files, { desc = '[S]earch [F]iles Git' })
   vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
   vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
   vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -774,6 +810,15 @@ do
       settings = {
         Lua = {
           format = { enable = false }, -- Disable formatting (formatting is done by stylua)
+        },
+      },
+    },
+
+    ruby_lsp = {
+      init_options = {
+        bundle = {
+          enabled = false,
+          gemfile = false,
         },
       },
     },
