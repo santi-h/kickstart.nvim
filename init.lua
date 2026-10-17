@@ -178,6 +178,7 @@ do
   vim.o.confirm = true
 
   -- santi-h configs
+  require 'custom.notes'
   vim.opt.title = true
   vim.opt.titlestring = "%{fnamemodify(getcwd(), ':t')}"
   vim.cmd.packadd('nvim.undotree')
@@ -279,7 +280,7 @@ do
   vim.keymap.set('n', '<leader>yp', "<cmd>let @+ = expand('%')<cr>", { desc = 'Yank file path' })
   vim.keymap.set('n', '<leader>yP', "<cmd>let @+ = expand('%:p')<cr>", { desc = 'Yank file path' })
   vim.keymap.set('n', '<leader>e', '<cmd>Neotree toggle show<cr>', { desc = 'Toggle [E]xplorer' })
-  vim.keymap.set('n', '<leader>er', '<cmd>Neotree reveal<cr>', { desc = '[E]xplorer [R]eveal current file' })
+  vim.keymap.set('n', '<leader>er', '<cmd>Neotree show reveal<cr>', { desc = '[E]xplorer [R]eveal current file' })
   vim.opt.linebreak = true
 
   vim.opt.listchars:append {
@@ -461,6 +462,8 @@ do
       { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
       { '<leader>t', group = '[T]oggle' },
       { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
+      { '<leader>n', group = '[N]otes' },
+      { '<leader>ng', group = '[N]otes [G]lobal' },
       { 'gr', group = 'LSP Actions', mode = { 'n' } },
     },
   }
